@@ -42,6 +42,9 @@ function isChecked(event){
         if(divPadre){
             const id = Number(divPadre.dataset.id)
             tareas[id].check = event.target.checked
+
+            guardarTareas()
+
             const span = divPadre.querySelector('span')
             span.style.color = event.target.checked ? 'blue' : 'white'
         }
@@ -52,10 +55,25 @@ function agregar (){
     const input = document.querySelector('input')
 
     tareas.push({id: tareas.length, nombre: input.value, check: false})
+    guardarTareas()
     crearTareas()
     input.value = ''
+}
+
+function guardarTareas(){
+    localStorage.setItem('lista', JSON.stringify(tareas))
+}
+
+function cargarTareas(){
+    const data = localStorage.getItem('lista')
+    if(data){
+        tareas.push(...JSON.parse(data))
+        crearTareas()
+    }
 }
 
 //Eventos
 buton.addEventListener('click', agregar)
 document.addEventListener('change', event => isChecked(event))
+
+cargarTareas()
