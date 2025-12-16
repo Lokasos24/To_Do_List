@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background-color: #222;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+}
+
+#tareas{
+    display: grid;
+    width: 76%;
+}
+
+#tareas>input{
+    align-self: flex-end;
+}
+
+span{
+    color: white;
+}
