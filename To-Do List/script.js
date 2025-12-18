@@ -85,6 +85,7 @@ function eliminar(index){
     if(verify){
         const findIndex = tareas.findIndex(value => value.id === index)
         tareas.splice(findIndex, 1)
+        guardarTareas()
         crearTareas()
     }
 }
@@ -93,7 +94,7 @@ function eliminar(index){
 buton.addEventListener('click', agregar)
 document.addEventListener('change', event => isChecked(event))
 document.addEventListener('click', event => {
-    if(event.target.class === 'deleted'){
+    if(event.target.class === 'remove'){
         const divPadre = event.target.closest('div')
         const index = divPadre.dataset.id
         if(divPadre){
@@ -102,3 +103,6 @@ document.addEventListener('click', event => {
     }
 })
 cargarTareas()
+
+// Controlador de localhost
+// localStorage.clear()
