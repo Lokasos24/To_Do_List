@@ -1,7 +1,9 @@
 const tareas = []
-const buton = document.querySelector('button')
+const buton = document.getElementById('addTask')
+let ids = 0
 
 function crearTareas(){
+    const allButtons = []
     const allInputs = []
     const allTareas = []
     const allDivs = []
@@ -17,18 +19,22 @@ function crearTareas(){
 
         allDivs[i].replaceChildren()
 
-        allTareas.push(allDivs[i].appendChild(document.createElement('span')));
         allInputs.push(allDivs[i].appendChild(document.createElement('input')));
+        allTareas.push(allDivs[i].appendChild(document.createElement('span')));
+        allButtons.push(allDivs[i].appendChild(document.createElement('button')));
 
-        //Los inputs se agregan con el tipo checkbox
+        allButtons[i].textContent = 'Eliminar'
+        allButtons[i].class = 'remove'
+
+        allInputs[i].checked = tareas[i].completed
         allInputs[i].type = 'checkbox'
-        allInputs[i].checked = tareas[i].check
+        allInputs[i].class = 'completeds'
 
         allTareas[i].textContent = ''
         
         allTareas[i].textContent = value.nombre
 
-        if(tareas[i].check){
+        if(tareas[i].completed){
             allTareas[i].style.color = 'blue'
         }else{
             allTareas[i].style.color = 'white'
@@ -41,7 +47,7 @@ function isChecked(event){
         const divPadre = event.target.closest('div')
         if(divPadre){
             const id = Number(divPadre.dataset.id)
-            tareas[id].check = event.target.checked
+            tareas[id].completed = event.target.checked
 
             guardarTareas()
 
@@ -53,8 +59,10 @@ function isChecked(event){
 
 function agregar (){
     const input = document.querySelector('input')
-
-    tareas.push({id: tareas.length, nombre: input.value, check: false})
+    const id = ids++
+    if(input.value.trim() !== ''){
+        tareas.push({id, nombre: input.value, completed: false})
+    }
     guardarTareas()
     crearTareas()
     input.value = ''
@@ -72,8 +80,25 @@ function cargarTareas(){
     }
 }
 
+function eliminar(index){
+    const verify = tareas.find(value => value.id === index)
+    if(verify){
+        const findIndex = tareas.findIndex(value => value.id === index)
+        tareas.splice(findIndex, 1)
+        crearTareas()
+    }
+}
+
 //Eventos
 buton.addEventListener('click', agregar)
 document.addEventListener('change', event => isChecked(event))
-
+document.addEventListener('click', event => {
+    if(event.target.class === 'deleted'){
+        const divPadre = event.target.closest('div')
+        const index = divPadre.dataset.id
+        if(divPadre){
+            eliminar(Number(index))
+        }
+    }
+})
 cargarTareas()
